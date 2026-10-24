@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Clan Testing Portal</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Vazirmatn:wght@400;500;700&display=swap">
+<style>
+/* Layout: one centered column, a glowing form card under a gradient wordmark. Neon dark, single theme by choice. */
+:root {
+  --bg: #05070d;
+  --card: #0a0f1b;
+  --field: #060910;
+  --line: #1a2a3f;
+  --fg: #e6f4ff;
+  --dim: #7f93a8;
+  --cyan: #35e8ff;
+  --violet: #8a4bff;
+  --pink: #ff3d8b;
+  --danger: #ff6b8f;
+  --font-display: "Orbitron", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Vazirmatn", Tahoma, system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background:
+    radial-gradient(60% 40% at 50% 0%, rgba(53, 232, 255, .10), transparent 70%),
+    radial-gradient(70% 45% at 100% 100%, rgba(255, 61, 139, .12), transparent 70%),
+    var(--bg);
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  padding-block: 20px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+/* header */
+.top { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.pill {
+  font-family: var(--font-display); font-weight: 500; font-size: clamp(10px, 3vw, 13px);
+  letter-spacing: .14em; text-transform: uppercase; color: var(--cyan);
+  padding: 9px 16px; border-radius: 999px; border: 1px solid #243a8a;
+  background: linear-gradient(90deg, rgba(53, 232, 255, .08), rgba(138, 75, 255, .14));
+  text-align: center; min-width: 0;
+}
+.lock { color: var(--dim); flex: none; }
+h1 {
+  margin: 0; text-align: center; direction: ltr;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(32px, 11vw, 54px); line-height: 1.15; letter-spacing: .02em;
+  background: linear-gradient(90deg, var(--cyan), var(--violet) 55%, var(--pink));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  overflow-wrap: anywhere;
+}
+.sub { margin: -8px 0 0; text-align: center; color: var(--dim); }
+.sub b { font-family: var(--font-display); font-weight: 700; color: var(--cyan); letter-spacing: .04em; }
+
+/* card */
+.card {
+  border: 1px solid var(--line); border-radius: 28px; padding: 22px;
+  background: linear-gradient(160deg, #0c1220, var(--card));
+  box-shadow: 0 0 0 1px rgba(138, 75, 255, .06), 0 24px 60px rgba(0, 0, 0, .55), 0 0 60px rgba(138, 75, 255, .08);
+}
+.head {
+  direction: ltr; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding-bottom: 14px; margin-bottom: 18px; border-bottom: 1px solid var(--line);
+  font-family: var(--font-display); font-weight: 700; font-size: clamp(11px, 3.2vw, 14px); letter-spacing: .08em;
+}
+.head .ver { color: var(--pink); }
+.head .state { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.dot { width: 18px; height: 18px; border-radius: 50%; background: #3d8aa0; box-shadow: 0 0 14px rgba(53, 232, 255, .55); flex: none; animation: beat 2.2s ease-in-out infinite; }
+@keyframes beat { 50% { box-shadow: 0 0 22px rgba(53, 232, 255, .95); } }
+
+form { display: flex; flex-direction: column; gap: 18px; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: end; }
+.row .lab { font-size: 14px; }
+.field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.lab { display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 15px; transition: color .2s; }
+.lab svg { width: 20px; height: 20px; flex: none; }
+.lab .hint { color: var(--dim); font-weight: 400; font-size: 13px; }
+.i-user { color: var(--cyan); } .i-age { color: var(--violet); } .i-cup { color: #ffc24a; }
+.i-tg { color: var(--cyan); } .i-pad { color: var(--pink); } .i-phone { color: var(--cyan); }
+
+input[type=text] {
+  width: 100%; min-width: 0; font: inherit; font-size: 17px; color: var(--fg);
+  background: var(--field); border: 1px solid var(--line); border-radius: 18px; padding: 15px 18px;
+  outline: none; transition: border-color .2s, box-shadow .2s;
+}
+input::placeholder { color: #55687c; opacity: 1; }
+input[type=text]:focus-visible { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(53, 232, 255, .16); }
+.ltr { direction: ltr; text-align: left; }
+.ltr::placeholder { direction: ltr; }
+.field.bad input[type=text] { border-color: var(--danger); }
+.err { min-height: 0; color: var(--danger); font-size: 13px; margin: 0; }
+.field:focus-within .lab.model { color: var(--cyan); }
+
+/* device picker */
+fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+legend { padding: 0; width: 100%; }
+.devices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 8px; }
+.devices input { position: absolute; opacity: 0; pointer-events: none; }
+.devices label {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  min-height: 84px; padding: 12px 6px; border-radius: 18px; cursor: pointer;
+  background: var(--field); border: 1px solid var(--line); color: var(--fg); font-weight: 500;
+  transition: border-color .2s, background .2s, transform .1s;
+}
+.devices label svg { width: 28px; height: 28px; color: var(--dim); transition: color .2s; }
+.devices label:active { transform: scale(.97); }
+.devices input:checked + label { border-color: var(--cyan); background: rgba(53, 232, 255, .12); box-shadow: 0 0 22px rgba(53, 232, 255, .14); }
+.devices input:checked + label svg { color: var(--cyan); }
+.devices input:focus-visible + label { outline: 2px solid var(--cyan); outline-offset: 2px; }
+.field.bad .devices label { border-color: rgba(255, 107, 143, .55); }
+
+/* submit */
+.send {
+  display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%;
+  font: inherit; font-weight: 700; font-size: 18px; color: var(--fg); cursor: pointer;
+  padding: 17px 20px; border-radius: 20px; border: 1px solid transparent;
+  background:
+    linear-gradient(#0a1020, #0a1020) padding-box,
+    linear-gradient(90deg, var(--cyan), var(--violet), var(--pink)) border-box;
+  position: relative; transition: filter .2s, transform .1s;
+}
+.send::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(90deg, rgba(53, 232, 255, .16), rgba(138, 75, 255, .2), rgba(255, 61, 139, .2)); z-index: 0; }
+.send > * { position: relative; z-index: 1; }
+.send svg { width: 22px; height: 22px; color: var(--cyan); }
+.send:hover { filter: brightness(1.25); }
+.send:active { transform: scale(.985); }
+.send:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+.note { margin: 0; text-align: center; color: var(--dim); font-size: 13px; }
+
+/* result */
+.result { display: flex; flex-direction: column; gap: 14px; }
+.result h2 { margin: 0; font-size: 19px; color: var(--cyan); }
+.result p { margin: 0; color: var(--dim); font-size: 14px; }
+.result textarea {
+  width: 100%; min-height: 190px; resize: vertical; font: inherit; font-size: 15px; line-height: 1.9; color: var(--fg);
+  background: var(--field); border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px;
+}
+.result textarea:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn {
+  flex: 1 1 150px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font: inherit; font-weight: 700; font-size: 16px; text-decoration: none; cursor: pointer;
+  padding: 13px 16px; border-radius: 16px; color: var(--fg); background: var(--field); border: 1px solid var(--line);
+}
+.btn.primary { background: linear-gradient(90deg, rgba(53, 232, 255, .22), rgba(138, 75, 255, .28)); border-color: var(--cyan); }
+.btn:hover { filter: brightness(1.25); }
+.btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+.btn svg { width: 20px; height: 20px; }
+.link { background: none; border: 0; color: var(--dim); font: inherit; font-size: 14px; text-decoration: underline; cursor: pointer; align-self: center; padding: 4px; }
+.link:hover { color: var(--fg); }
+
+@media (max-width: 380px) {
+  .card { padding: 16px; border-radius: 24px; }
+  .row { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dot { animation: none; }
+  * { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+
+<main class="wrap">
+  <header class="top">
+    <svg class="lock" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="3" fill="currentColor" stroke="none"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+    <div class="pill">Call of Duty Clan Application</div>
+  </header>
+
+  <h1 id="title">CLAN TESTING</h1>
+  <p class="sub">پورتال رسمی تست ورودی کلن <b id="clanSub">CLAN</b></p>
+
+  <section class="card" id="formCard">
+    <div class="head" dir="ltr">
+      <span class="ver">SYSTEM V2.5</span>
+      <span class="state">TEST FORM // ONLINE <span class="dot"></span></span>
+    </div>
+
+    <form id="form" novalidate autocomplete="off">
+      <div class="field" data-field="name">
+        <label class="lab" for="name">
+          <svg class="i-user" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="8" r="4.2"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7z"/></svg>
+          اسم کوچک
+        </label>
+        <input type="text" id="name" maxlength="30" placeholder="مثال: عرفان" autocomplete="off">
+        <p class="err" aria-live="polite"></p>
+      </div>
+
+      <div class="row">
+        <div class="field" data-field="age">
+          <label class="lab" for="age">
+            <svg class="i-age" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 2h12v2.5c0 2.6-1.6 4.4-3.4 5.5 1.8 1.100 3.400 2.900 3.400 5.500V19h1.500v3h-15v-3H6v-3.500c0-2.600 1.600-4.400 3.400-5.500C7.600 8.900 6 7.100 6 4.500z"/></svg>
+            سن
+          </label>
+          <input type="text" id="age" inputmode="numeric" maxlength="2" placeholder="مثال: 18">
+          <p class="err" aria-live="polite"></p>
+        </div>
+        <div class="field" data-field="level">
+          <label class="lab" for="level">
+            <svg class="i-cup" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 3h10v4a5 5 0 0 1-4 4.900V15h3v2h1v3H7v-3h1v-2h3v-3.100A5 5 0 0 1 7 7z"/><path d="M5 5H3v2a3 3 0 0 0 3 3V8.200A1 1 0 0 1 5 7zm14 0h2v2a3 3 0 0 1-3 3V8.200A1 1 0 0 0 19 7z"/></svg>
+            <span>لول بازی <span class="hint">(حداکثر ۵۰۰)</span></span>
+          </label>
+          <input type="text" id="level" inputmode="numeric" maxlength="3" placeholder="مثال: 350">
+          <p class="err" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <div class="field" data-field="tg">
+        <label class="lab" for="tg">
+          <svg class="i-tg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.900 6.800-1.700 8c-.1.600-.5.700-1 .4l-2.600-1.900-1.200 1.200c-.2.200-.3.300-.6.300l.2-2.700 4.900-4.400c.2-.2 0-.3-.3-.1l-6.100 3.800-2.600-.8c-.6-.2-.6-.6.100-.9l10.200-3.900c.5-.2.900.1.700.9z"/></svg>
+          آیدی تلگرام
+        </label>
+        <input type="text" id="tg" class="ltr" maxlength="33" placeholder="@username" autocapitalize="none" spellcheck="false">
+        <p class="err" aria-live="polite"></p>
+      </div>
+
+      <fieldset class="field" data-field="device">
+        <legend class="lab">
+          <svg class="i-pad" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 6h10a5 5 0 0 1 4.900 6l-.8 4a3 3 0 0 1-5 1.700L14 16h-4l-2.100 1.700a3 3 0 0 1-5-1.700l-.8-4A5 5 0 0 1 7 6zm.5 3v1.500H6V12h1.500v1.500H9V12h1.500v-1.500H9V9zm8.500 1.500a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm2 2a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>
+          دیوایس بازی
+        </legend>
+        <div class="devices">
+          <input type="radio" name="device" id="d-pc" value="PC">
+          <label for="d-pc">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.500" y="3.500" width="19" height="13" rx="2.500"/><path d="M8 21h8M12 16.500V21"/></svg>
+            PC
+          </label>
+          <input type="radio" name="device" id="d-android" value="اندروید">
+          <label for="d-android">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.500" width="12" height="19" rx="3"/><circle cx="12" cy="6" r=".8" fill="currentColor"/><path d="M10 18.500h4"/></svg>
+            اندروید
+          </label>
+          <input type="radio" name="device" id="d-ios" value="iOS">
+          <label for="d-ios">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.500" width="12" height="19" rx="3"/><path d="M10 5.500h4"/></svg>
+            iOS
+          </label>
+        </div>
+        <p class="err" aria-live="polite"></p>
+      </fieldset>
+
+      <div class="field" data-field="model">
+        <label class="lab model" for="model" id="modelLab">
+          <svg class="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.500" y="2.500" width="11" height="19" rx="2.500"/><path d="M11 18.500h2"/></svg>
+          <span id="modelText">مدل دقیق گوشی</span>
+        </label>
+        <input type="text" id="model" maxlength="60" placeholder="مثال: Poco F5 / iPhone 13 Pro">
+        <p class="err" aria-live="polite"></p>
+      </div>
+
+      <button class="send" type="submit">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.500 3.500 2.800 10.700c-.8.300-.8 1.300 0 1.600l4.600 1.700 1.800 5.600c.2.700 1.100.9 1.600.4l2.600-2.500 4.700 3.500c.6.400 1.400.1 1.600-.6l3.200-16c.2-.9-.7-1.600-1.400-1.300zM9 13.500l8.800-5.400-6.800 6.800-.4 3z"/></svg>
+        ارسال اطلاعات درخواست
+      </button>
+      <p class="note">اطلاعات فقط داخل یک پیام تلگرام برای ادمین کلن فرستاده می‌شود.</p>
+    </form>
+  </section>
+
+  <section class="card result" id="result" hidden aria-live="polite">
+    <h2>پیام درخواست آماده شد</h2>
+    <p id="resultHelp">برای ارسال، دکمه تلگرام را بزنید و پیام را برای ادمین بفرستید. هنوز چیزی ارسال نشده است.</p>
+    <textarea id="msg" readonly aria-label="متن پیام درخواست"></textarea>
+    <div class="actions">
+      <a class="btn primary" id="tgLink" href="#" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.500 3.500 2.800 10.700c-.8.300-.8 1.300 0 1.600l4.600 1.700 1.800 5.600c.2.700 1.100.9 1.600.4l2.600-2.500 4.700 3.500c.6.400 1.400.1 1.600-.6l3.200-16c.2-.9-.7-1.600-1.400-1.300z"/></svg>
+        ارسال در تلگرام
+      </a>
+      <button class="btn" type="button" id="copyBtn">کپی پیام</button>
+    </div>
+    <button class="link" type="button" id="backBtn">ویرایش اطلاعات</button>
+  </section>
+</main>
+
+<script>
+/* ───────── تنظیمات: این دو خط را عوض کنید ───────── */
+var CLAN_NAME = "YOUR CLAN";       // اسم کلن شما (انگلیسی)
+var ADMIN_TELEGRAM = "";           // آیدی تلگرام ادمین بدون @ ، مثلاً "my_admin"
+/* ─────────────────────────────────────────────────── */
+
+var $ = function (id) { return document.getElementById(id); };
+$("title").textContent = CLAN_NAME.toUpperCase() + " TESTING";
+$("clanSub").textContent = CLAN_NAME;
+document.title = CLAN_NAME + " Testing Portal";
+
+var MODEL_HINTS = {
+  "iOS": ["مدل دقیق گوشی", "مثال: iPhone 13 Pro"],
+  "اندروید": ["مدل دقیق گوشی", "مثال: Poco F5"],
+  "PC": ["مشخصات دقیق سیستم", "مثال: RTX 3060 / i5-12400 / 16GB"]
+};
+
+function fixDigits(s) {
+  return s.replace(/[۰-۹]/g, function (d) { return d.charCodeAt(0) - 1776; })
+          .replace(/[٠-٩]/g, function (d) { return d.charCodeAt(0) - 1632; });
+}
+["age", "level"].forEach(function (id) {
+  $(id).addEventListener("input", function (e) {
+    e.target.value = fixDigits(e.target.value).replace(/\D/g, "");
+  });
+});
+
+var devices = document.querySelectorAll("input[name=device]");
+devices.forEach(function (r) {
+  r.addEventListener("change", function () {
+    var h = MODEL_HINTS[r.value];
+    $("modelText").textContent = h[0];
+    $("model").placeholder = h[1];
+    setError("device", "");
+  });
+});
+
+function setError(key, text) {
+  var box = document.querySelector('[data-field="' + key + '"]');
+  box.classList.toggle("bad", !!text);
+  box.querySelector(".err").textContent = text;
+}
+["name", "age", "level", "tg", "model"].forEach(function (k) {
+  $(k).addEventListener("input", function () { setError(k, ""); });
+});
+
+function selectedDevice() {
+  var c = document.querySelector("input[name=device]:checked");
+  return c ? c.value : "";
+}
+
+function validate() {
+  var v = {
+    name: $("name").value.trim().replace(/\s+/g, " "),
+    age: parseInt(fixDigits($("age").value), 10),
+    level: parseInt(fixDigits($("level").value), 10),
+    tg: $("tg").value.trim().replace(/^@/, ""),
+    device: selectedDevice(),
+    model: $("model").value.trim().replace(/\s+/g, " ")
+  };
+  var ok = true, first = null;
+  function fail(k, t) { setError(k, t); ok = false; if (!first) first = k; }
+
+  setError("name", ""); setError("age", ""); setError("level", "");
+  setError("tg", ""); setError("device", ""); setError("model", "");
+
+  if (v.name.length < 2) fail("name", "اسم کوچک را وارد کنید.");
+  if (!(v.age >= 10 && v.age <= 99)) fail("age", "سن معتبر وارد کنید.");
+  if (!(v.level >= 1 && v.level <= 500)) fail("level", "لول باید بین ۱ تا ۵۰۰ باشد.");
+  if (!/^[A-Za-z][A-Za-z0-9_]{4,31}$/.test(v.tg)) fail("tg", "آیدی تلگرام معتبر نیست (۵ تا ۳۲ حرف انگلیسی، عدد یا _).");
+  if (!v.device) fail("device", "دیوایس بازی را انتخاب کنید.");
+  if (v.model.length < 2) fail("model", v.device === "PC" ? "مشخصات سیستم را بنویسید." : "مدل گوشی را بنویسید.");
+
+  if (!ok) {
+    var el = first === "device" ? $("d-pc") : $(first);
+    el.focus({ preventScroll: true });
+    el.scrollIntoView({ block: "center", behavior: "smooth" });
+  }
+  return ok ? v : null;
+}
+
+function buildMessage(v) {
+  return [
+    "درخواست عضویت کلن " + CLAN_NAME,
+    "",
+    "اسم: " + v.name,
+    "سن: " + v.age,
+    "لول: " + v.level,
+    "آیدی تلگرام: @" + v.tg,
+    "دیوایس: " + v.device,
+    (v.device === "PC" ? "مشخصات سیستم: " : "مدل گوشی: ") + v.model
+  ].join("\n");
+}
+
+$("form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  var v = validate();
+  if (!v) return;
+  var text = buildMessage(v);
+  $("msg").value = text;
+
+  var admin = ADMIN_TELEGRAM.replace(/^@/, "").trim();
+  var link = $("tgLink");
+  if (admin) {
+    link.hidden = false;
+    link.href = "https://t.me/" + encodeURIComponent(admin) + "?text=" + encodeURIComponent(text);
+    $("resultHelp").textContent = "برای ارسال، دکمه تلگرام را بزنید و پیام را برای ادمین بفرستید. هنوز چیزی ارسال نشده است.";
+  } else {
+    link.hidden = true;
+    $("resultHelp").textContent = "پیام را کپی کنید و برای ادمین کلن در تلگرام بفرستید. هنوز چیزی ارسال نشده است.";
+  }
+  $("formCard").hidden = true;
+  $("result").hidden = false;
+  $("result").scrollIntoView({ block: "start", behavior: "smooth" });
+});
+
+$("backBtn").addEventListener("click", function () {
+  $("result").hidden = true;
+  $("formCard").hidden = false;
+  $("formCard").scrollIntoView({ block: "start", behavior: "smooth" });
+});
+
+$("copyBtn").addEventListener("click", function () {
+  var btn = $("copyBtn"), text = $("msg").value;
+  function done(ok) {
+    btn.textContent = ok ? "کپی شد" : "متن را انتخاب و کپی کنید";
+    setTimeout(function () { btn.textContent = "کپی پیام"; }, 2000);
+  }
+  function fallback() {
+    $("msg").focus(); $("msg").select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (err) {}
+    done(ok);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function () { done(true); }, fallback);
+  } else {
+    fallback();
+  }
+});
+</script>
+
+</body>
+</html>
